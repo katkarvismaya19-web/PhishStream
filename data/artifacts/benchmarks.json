@@ -1,0 +1,67 @@
+{
+  "machine": "x86_64 / Python 3.12.3",
+  "engine": {
+    "events": 60000,
+    "seconds": 6.39,
+    "events_per_sec_single_core": 9383,
+    "p50_ms": 0.824,
+    "p95_ms": 1.298,
+    "p99_ms": 1.617,
+    "live_precision": 0.9136,
+    "live_recall": 0.9867
+  },
+  "bloom": {
+    "items": 41769,
+    "bloom_bytes": 75068,
+    "python_set_bytes": 2097368,
+    "memory_ratio": 27.9,
+    "k": 10,
+    "target_fp": 0.001,
+    "expected_fp": 0.001,
+    "observed_fp": 0.00101,
+    "false_negatives": 0,
+    "build_urls_per_sec": 317389
+  },
+  "hyperloglog": {
+    "register_bytes": 4096,
+    "theoretical_std_error_pct": 1.62,
+    "runs": [
+      {
+        "true": 10000,
+        "estimate": 9858,
+        "error_pct": 1.42
+      },
+      {
+        "true": 100000,
+        "estimate": 102087,
+        "error_pct": 2.09
+      },
+      {
+        "true": 1000000,
+        "estimate": 1020955,
+        "error_pct": 2.1
+      }
+    ],
+    "exact_set_bytes_1M": 93443538
+  },
+  "countmin": {
+    "events": 1000000,
+    "distinct_keys": 36534,
+    "sketch_bytes": 54380,
+    "width": 2719,
+    "depth": 5,
+    "top20_mean_error_pct": 0.223,
+    "top20_recall": 1.0,
+    "error_bound_eps_N": 1000
+  },
+  "dgim": {
+    "bits": 1000000,
+    "window": 10000,
+    "buckets": 19,
+    "bucket_bytes": 152,
+    "exact_bytes": 1250,
+    "mean_error_pct": 9.97,
+    "max_error_pct": 32.97,
+    "bound_pct": 50
+  }
+}

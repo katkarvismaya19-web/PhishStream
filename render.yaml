@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: phishstream
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt && python -m phishstream.pipeline
+    startCommand: uvicorn phishstream.api.app:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: SIM_RATE
+        value: "300"

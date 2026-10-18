@@ -1,0 +1,848 @@
+{
+  "descriptive": {
+    "n_phishing": 49595,
+    "n_safe": 94199,
+    "date_range": [
+      "2026-07-17",
+      "2026-10-23"
+    ],
+    "top_brands": {
+      "sbi": 5251,
+      "phonepe": 2491,
+      "hdfc": 2416,
+      "paytm": 2300,
+      "amazon": 2286,
+      "icici": 1731,
+      "flipkart": 1678,
+      "irctc": 1433,
+      "microsoft": 1387,
+      "whatsapp": 1379,
+      "uidai": 1349,
+      "axis": 1290
+    },
+    "brand_share_pct": 81.6,
+    "top_lures": {
+      "login": 6880,
+      "kyc": 5694,
+      "verify": 5485,
+      "secure": 5474,
+      "update": 3613,
+      "redeem": 3547,
+      "loan": 2917,
+      "otp": 2840,
+      "claim": 2825,
+      "account": 2810,
+      "confirm": 2778,
+      "refund": 2620
+    },
+    "top_tlds": {
+      ".in": 7051,
+      ".com": 6770,
+      ".net": 3488,
+      ".org": 3474,
+      ".app": 2800,
+      "(ip)": 2662,
+      ".vip": 2358,
+      ".rest": 1954,
+      ".click": 1875,
+      ".site": 1781,
+      ".sbs": 1744,
+      ".xyz": 1553
+    },
+    "by_hour": [
+      2384,
+      2194,
+      2054,
+      2004,
+      1875,
+      1846,
+      1767,
+      1670,
+      1697,
+      1690,
+      1797,
+      1939,
+      2030,
+      2097,
+      2110,
+      2153,
+      2113,
+      2047,
+      2170,
+      2169,
+      2288,
+      2529,
+      2546,
+      2426
+    ],
+    "by_weekday": {
+      "Monday": 8011,
+      "Tuesday": 7575,
+      "Wednesday": 7371,
+      "Sunday": 6769,
+      "Saturday": 6724,
+      "Friday": 6632,
+      "Thursday": 6513
+    },
+    "weekly_volume": {
+      "2026-07-19": 999,
+      "2026-07-26": 2737,
+      "2026-08-02": 3372,
+      "2026-08-09": 3211,
+      "2026-08-16": 3645,
+      "2026-08-23": 3432,
+      "2026-08-30": 5047,
+      "2026-09-06": 4750,
+      "2026-09-13": 3136,
+      "2026-09-20": 3584,
+      "2026-09-27": 4759,
+      "2026-10-04": 4010,
+      "2026-10-11": 4047,
+      "2026-10-18": 2845,
+      "2026-10-25": 21
+    },
+    "brand_weekly": {
+      "sbi": {
+        "2026-07-19": 63,
+        "2026-07-26": 189,
+        "2026-08-02": 287,
+        "2026-08-09": 258,
+        "2026-08-16": 202,
+        "2026-08-23": 483,
+        "2026-08-30": 1047,
+        "2026-09-06": 648,
+        "2026-09-13": 542,
+        "2026-09-20": 379,
+        "2026-09-27": 245,
+        "2026-10-04": 414,
+        "2026-10-11": 299,
+        "2026-10-18": 191,
+        "2026-10-25": 4
+      },
+      "phonepe": {
+        "2026-07-19": 25,
+        "2026-07-26": 90,
+        "2026-08-02": 67,
+        "2026-08-09": 157,
+        "2026-08-16": 91,
+        "2026-08-23": 86,
+        "2026-08-30": 380,
+        "2026-09-06": 634,
+        "2026-09-13": 166,
+        "2026-09-20": 123,
+        "2026-09-27": 129,
+        "2026-10-04": 101,
+        "2026-10-11": 88,
+        "2026-10-18": 354
+      },
+      "hdfc": {
+        "2026-07-19": 26,
+        "2026-07-26": 156,
+        "2026-08-02": 129,
+        "2026-08-09": 98,
+        "2026-08-16": 224,
+        "2026-08-23": 126,
+        "2026-08-30": 206,
+        "2026-09-06": 306,
+        "2026-09-13": 150,
+        "2026-09-20": 176,
+        "2026-09-27": 252,
+        "2026-10-04": 273,
+        "2026-10-11": 225,
+        "2026-10-18": 69
+      },
+      "paytm": {
+        "2026-07-19": 24,
+        "2026-07-26": 80,
+        "2026-08-02": 217,
+        "2026-08-09": 193,
+        "2026-08-16": 239,
+        "2026-08-23": 331,
+        "2026-08-30": 135,
+        "2026-09-06": 33,
+        "2026-09-13": 90,
+        "2026-09-20": 304,
+        "2026-09-27": 138,
+        "2026-10-04": 184,
+        "2026-10-11": 138,
+        "2026-10-18": 194
+      },
+      "amazon": {
+        "2026-07-19": 3,
+        "2026-07-26": 64,
+        "2026-08-02": 142,
+        "2026-08-09": 69,
+        "2026-08-16": 79,
+        "2026-08-23": 221,
+        "2026-08-30": 146,
+        "2026-09-06": 223,
+        "2026-09-13": 62,
+        "2026-09-20": 196,
+        "2026-09-27": 648,
+        "2026-10-04": 164,
+        "2026-10-11": 204,
+        "2026-10-18": 65
+      }
+    },
+    "bill_scams_month_end_pct": 53.8,
+    "day_of_month_bill": [
+      90,
+      55,
+      55,
+      13,
+      20,
+      34,
+      29,
+      38,
+      44,
+      54,
+      32,
+      44,
+      34,
+      30,
+      46,
+      45,
+      187,
+      51,
+      73,
+      46,
+      36,
+      226,
+      56,
+      72,
+      156,
+      152,
+      265,
+      235,
+      292,
+      262,
+      122
+    ],
+    "https_share_pct": 79.1,
+    "top_countries": {
+      "DE": 11256,
+      "FR": 7762,
+      "NL": 6039,
+      "CN": 5185,
+      "SG": 4569,
+      "UA": 4197,
+      "IN": 3710,
+      "HK": 2307
+    },
+    "peak_hour": 22
+  },
+  "frequent_itemsets": {
+    "baskets": 49595,
+    "min_support_count": 198,
+    "frequent_items": 74,
+    "frequent_pairs": [
+      {
+        "items": [
+          "tld:.in",
+          "word:verify"
+        ],
+        "support": 0.0256,
+        "count": 1269
+      },
+      {
+        "items": [
+          "tld:.in",
+          "word:secure"
+        ],
+        "support": 0.0248,
+        "count": 1229
+      },
+      {
+        "items": [
+          "brand:sbi",
+          "tld:.vip"
+        ],
+        "support": 0.0215,
+        "count": 1067
+      },
+      {
+        "items": [
+          "tld:.com",
+          "word:secure"
+        ],
+        "support": 0.0181,
+        "count": 899
+      },
+      {
+        "items": [
+          "tld:.com",
+          "word:verify"
+        ],
+        "support": 0.018,
+        "count": 895
+      },
+      {
+        "items": [
+          "word:login",
+          "word:secure"
+        ],
+        "support": 0.0169,
+        "count": 836
+      },
+      {
+        "items": [
+          "tld:.com",
+          "word:login"
+        ],
+        "support": 0.0168,
+        "count": 834
+      },
+      {
+        "items": [
+          "tld:.in",
+          "word:login"
+        ],
+        "support": 0.0159,
+        "count": 787
+      },
+      {
+        "items": [
+          "brand:sbi",
+          "word:login"
+        ],
+        "support": 0.0146,
+        "count": 723
+      },
+      {
+        "items": [
+          "brand:phonepe",
+          "tld:.rest"
+        ],
+        "support": 0.0136,
+        "count": 675
+      },
+      {
+        "items": [
+          "word:kyc",
+          "word:update"
+        ],
+        "support": 0.0132,
+        "count": 657
+      },
+      {
+        "items": [
+          "tld:.net",
+          "word:verify"
+        ],
+        "support": 0.0125,
+        "count": 621
+      },
+      {
+        "items": [
+          "word:kyc",
+          "word:verify"
+        ],
+        "support": 0.0124,
+        "count": 617
+      },
+      {
+        "items": [
+          "tld:.org",
+          "word:verify"
+        ],
+        "support": 0.0124,
+        "count": 613
+      },
+      {
+        "items": [
+          "tld:.net",
+          "word:secure"
+        ],
+        "support": 0.0122,
+        "count": 606
+      }
+    ],
+    "frequent_pairs_total": 129,
+    "frequent_triples_total": 2,
+    "frequent_triples": [
+      {
+        "items": [
+          "brand:phonepe",
+          "tld:.rest",
+          "word:netbanking"
+        ],
+        "support": 0.0107,
+        "count": 533
+      },
+      {
+        "items": [
+          "brand:phonepe",
+          "tld:.click",
+          "word:loan"
+        ],
+        "support": 0.0046,
+        "count": 229
+      }
+    ],
+    "rules": [
+      {
+        "if": [
+          "brand:phonepe",
+          "tld:.rest"
+        ],
+        "then": [
+          "word:netbanking"
+        ],
+        "support": 0.0107,
+        "confidence": 0.79,
+        "lift": 25.1
+      },
+      {
+        "if": [
+          "brand:phonepe",
+          "word:loan"
+        ],
+        "then": [
+          "tld:.click"
+        ],
+        "support": 0.0046,
+        "confidence": 0.782,
+        "lift": 20.67
+      }
+    ],
+    "apriori_candidate_pairs": 2701,
+    "pcy_candidate_pairs": 298,
+    "pcy_frequent_buckets": 175,
+    "pcy_same_result_as_apriori": true
+  },
+  "pagerank": {
+    "available": true,
+    "nodes": 50750,
+    "edges": 69133,
+    "iterations": 50,
+    "top_networks": [
+      {
+        "network": "76.203.128.0/24",
+        "rank": 1.406,
+        "domains": 2017
+      },
+      {
+        "network": "148.184.102.0/24",
+        "rank": 1.406,
+        "domains": 493
+      },
+      {
+        "network": "176.215.251.0/24",
+        "rank": 1.39,
+        "domains": 2306
+      },
+      {
+        "network": "43.56.147.0/24",
+        "rank": 1.371,
+        "domains": 2056
+      },
+      {
+        "network": "138.5.251.0/24",
+        "rank": 1.369,
+        "domains": 1945
+      },
+      {
+        "network": "53.163.52.0/24",
+        "rank": 1.359,
+        "domains": 2213
+      },
+      {
+        "network": "135.122.1.0/24",
+        "rank": 1.353,
+        "domains": 1963
+      },
+      {
+        "network": "45.149.147.0/24",
+        "rank": 1.342,
+        "domains": 2170
+      },
+      {
+        "network": "118.135.70.0/24",
+        "rank": 1.333,
+        "domains": 376
+      },
+      {
+        "network": "114.192.39.0/24",
+        "rank": 1.298,
+        "domains": 1881
+      }
+    ],
+    "top_ips": [
+      {
+        "ip": "176.215.251.31",
+        "rank": 0.147
+      },
+      {
+        "ip": "176.215.251.25",
+        "rank": 0.147
+      },
+      {
+        "ip": "138.5.251.240",
+        "rank": 0.145
+      },
+      {
+        "ip": "76.203.128.166",
+        "rank": 0.143
+      },
+      {
+        "ip": "43.56.147.97",
+        "rank": 0.142
+      },
+      {
+        "ip": "176.215.251.199",
+        "rank": 0.142
+      },
+      {
+        "ip": "176.215.251.250",
+        "rank": 0.14
+      },
+      {
+        "ip": "45.149.147.242",
+        "rank": 0.139
+      },
+      {
+        "ip": "43.56.147.184",
+        "rank": 0.139
+      },
+      {
+        "ip": "176.215.251.51",
+        "rank": 0.139
+      }
+    ],
+    "synthetic_check": {
+      "planted_bulletproof_networks": 8,
+      "found_in_top8": 7,
+      "precision_at_8": 0.875
+    }
+  },
+  "campaigns": {
+    "hosts": 34750,
+    "lsh_bands": 16,
+    "lsh_rows": 4,
+    "jaccard_threshold": 0.6,
+    "max_gap_hours": 72,
+    "all_pairs": 603763875,
+    "candidate_pairs": 2282936,
+    "verified_pairs": 263998,
+    "comparisons_saved_pct": 99.6219,
+    "seconds": 14.3,
+    "campaigns_found": 3301,
+    "hosts_in_campaigns_pct": 73.6,
+    "median_lifetime_hours": 40.0,
+    "size_distribution": {
+      "10": 263,
+      "5": 1127,
+      "20": 57,
+      "0": 1620,
+      "35": 11,
+      "30": 34,
+      "40": 12,
+      "50": 37,
+      "25": 41,
+      "15": 90,
+      "45": 9
+    },
+    "top_campaigns": [
+      {
+        "size": 482,
+        "brand": "phonepe",
+        "examples": [
+          "phonepe-netbanking.rest",
+          "phonepe-netbanking755.rest",
+          "phonepe.phonepe-netbanking-43.rest",
+          "phonepe.phonepe-netbanking-71.rest"
+        ],
+        "first_seen": "2026-08-29 00:59:00",
+        "hours_active": 99.1
+      },
+      {
+        "size": 243,
+        "brand": "phonepe",
+        "examples": [
+          "phonepe-loan-approved750.click",
+          "phonepe.phonepe-loan-approved-27.click",
+          "phonepeloanapprovedindia74.rest",
+          "phonepe-loan-approved.click"
+        ],
+        "first_seen": "2026-10-12 21:29:00",
+        "hours_active": 4.3
+      },
+      {
+        "size": 217,
+        "brand": "amazon",
+        "examples": [
+          "redelivery-amazon46.github.io",
+          "redelivery-amazon96.000webhostapp.com",
+          "redelivery-amazon80.vercel.app",
+          "redelivery-amazon40.web.app"
+        ],
+        "first_seen": "2026-08-28 07:11:00",
+        "hours_active": 710.5
+      },
+      {
+        "size": 189,
+        "brand": "sbi",
+        "examples": [
+          "sbi-job-offer948.vip",
+          "sbi-job-offer.vip",
+          "sbi-job-offer584.vip",
+          "sbi-job-offer830.vip"
+        ],
+        "first_seen": "2026-08-23 13:50:00",
+        "hours_active": 30.6
+      },
+      {
+        "size": 165,
+        "brand": "irctc",
+        "examples": [
+          "irctc-delivery-failed11.site",
+          "irctc.irctc-delivery-failed-51.site",
+          "irctcdeliveryfailedhelp5.click",
+          "irctc.irctc-delivery-failed-91.site"
+        ],
+        "first_seen": "2026-10-12 09:26:00",
+        "hours_active": 159.0
+      },
+      {
+        "size": 126,
+        "brand": "aadhaar",
+        "examples": [
+          "aadhaar-suspended99.github.io",
+          "aadhaar-suspended64.000webhostapp.com",
+          "aadhaar-suspended36.weebly.com",
+          "aadhaar-suspended33.000webhostapp.com"
+        ],
+        "first_seen": "2026-08-14 20:39:00",
+        "hours_active": 15.8
+      },
+      {
+        "size": 111,
+        "brand": "whatsapp",
+        "examples": [
+          "whatsapp.winner-whatsapp-99.online",
+          "winnerwhatsappindia52.online",
+          "winner-whatsapp242.online",
+          "winner-whatsapp.online"
+        ],
+        "first_seen": "2026-08-07 20:24:00",
+        "hours_active": 281.2
+      },
+      {
+        "size": 103,
+        "brand": "sbi",
+        "examples": [
+          "sbi-locked973.vip",
+          "sbi.sbi-locked-34.vip",
+          "sbi-locked666.vip",
+          "sbi-locked.vip"
+        ],
+        "first_seen": "2026-09-03 22:26:00",
+        "hours_active": 128.8
+      },
+      {
+        "size": 102,
+        "brand": "sbi",
+        "examples": [
+          "sbijoboffer60.vip",
+          "sbijoboffer85.info",
+          "sbijoboffercare19.online",
+          "sbijobofferhelp19.vip"
+        ],
+        "first_seen": "2026-08-23 14:00:00",
+        "hours_active": 30.5
+      },
+      {
+        "size": 101,
+        "brand": "sbi",
+        "examples": [
+          "rekyc-sbi45.vip",
+          "sbi.rekyc-sbi-77.vip",
+          "sbi.rekyc-sbi-89.vip",
+          "sbi.rekyc-sbi-73.vip"
+        ],
+        "first_seen": "2026-08-30 10:15:00",
+        "hours_active": 91.9
+      },
+      {
+        "size": 101,
+        "brand": "whatsapp",
+        "examples": [
+          "paytm.paytm-electricity-bill-85.site",
+          "whatsappelectricitybillcare34.shop",
+          "whatsapp-electricity-bill361.shop",
+          "axiselectricitybillhelp56.vip"
+        ],
+        "first_seen": "2026-08-23 13:00:00",
+        "hours_active": 182.4
+      },
+      {
+        "size": 95,
+        "brand": "gpay",
+        "examples": [
+          "icici-delivery-failed.sbs",
+          "gpaydeliveryfailedonline23.top",
+          "gpay-delivery-failed960.top",
+          "icicideliveryfailedindia8.xyz"
+        ],
+        "first_seen": "2026-09-16 12:22:00",
+        "hours_active": 232.8
+      }
+    ],
+    "s_curve": [
+      {
+        "s": 0.0,
+        "p": 0.0
+      },
+      {
+        "s": 0.1,
+        "p": 0.002
+      },
+      {
+        "s": 0.2,
+        "p": 0.025
+      },
+      {
+        "s": 0.3,
+        "p": 0.122
+      },
+      {
+        "s": 0.4,
+        "p": 0.34
+      },
+      {
+        "s": 0.5,
+        "p": 0.644
+      },
+      {
+        "s": 0.6,
+        "p": 0.891
+      },
+      {
+        "s": 0.7,
+        "p": 0.988
+      },
+      {
+        "s": 0.8,
+        "p": 1.0
+      },
+      {
+        "s": 0.9,
+        "p": 1.0
+      },
+      {
+        "s": 1.0,
+        "p": 1.0
+      }
+    ],
+    "synthetic_check": {
+      "mean_cluster_purity": 0.782,
+      "planted_campaigns": 3155
+    }
+  },
+  "clustering": {
+    "k": 8,
+    "silhouette_by_k": {
+      "3": 0.292,
+      "4": 0.258,
+      "5": 0.256,
+      "6": 0.273,
+      "7": 0.261,
+      "8": 0.292
+    },
+    "families": [
+      {
+        "cluster": 0,
+        "share_pct": 26.2,
+        "traits": [
+          "cheap risky TLD",
+          "hyphenated domain",
+          "brand name in domain"
+        ],
+        "example": "https://kotak.redelivery-kotak-56.vip/otp"
+      },
+      {
+        "cluster": 1,
+        "share_pct": 19.6,
+        "traits": [
+          "inside hacked WordPress folders",
+          "deep paths"
+        ],
+        "example": "http://shreedental78.org/media/jio/update"
+      },
+      {
+        "cluster": 3,
+        "share_pct": 14.4,
+        "traits": [
+          "mixed"
+        ],
+        "example": "https://sbilockedindia44.info/track?id=dkvmwmvbpapm&session=20783026"
+      },
+      {
+        "cluster": 4,
+        "share_pct": 12.8,
+        "traits": [
+          "link shortener"
+        ],
+        "example": "https://indiapost-support.com/index.php"
+      },
+      {
+        "cluster": 5,
+        "share_pct": 12.1,
+        "traits": [
+          "free hosting",
+          "hyphenated domain"
+        ],
+        "example": "https://paypal-job-offer64.firebaseapp.com/wp-login.php"
+      },
+      {
+        "cluster": 6,
+        "share_pct": 9.4,
+        "traits": [
+          "cheap risky TLD"
+        ],
+        "example": "https://sbilockedcare58.click/account"
+      },
+      {
+        "cluster": 2,
+        "share_pct": 5.3,
+        "traits": [
+          "custom port",
+          "raw IP host",
+          "digits in domain"
+        ],
+        "example": "http://135.122.1.48:3000/microsoft/otp"
+      },
+      {
+        "cluster": 7,
+        "share_pct": 0.2,
+        "traits": [
+          "official domain"
+        ],
+        "example": "https://my.hdfcbank.com/kjknct"
+      }
+    ]
+  },
+  "findings": [
+    "81.6% of phishing URLs impersonate a known brand; the top three (sbi, phonepe, hdfc) alone account for 20.5%.",
+    "Phishing activity peaks around 22:00, and 79.1% of phishing links use HTTPS, so the padlock is not a sign of safety.",
+    "53.8% of electricity-bill scams appear from the 24th of the month onwards, when real bills are due.",
+    "Most used domain endings: .in (7,051), .com (6,770), .net (3,488).",
+    "Strongest lure pattern: URLs with brand:phonepe + tld:.rest also contain word:netbanking 79% of the time (lift 25.1).",
+    "PCY counted 298 candidate pairs versus Apriori's 2,701, finding the identical frequent pairs.",
+    "PageRank ranks network 76.203.128.0/24 highest: it hosts 2,017 distinct phishing domains.",
+    "PageRank recovered 7 of the 8 planted bulletproof networks in its top 8.",
+    "LSH grouped 73.6% of phishing hosts into 3,301 campaigns while skipping 99.6219% of pairwise comparisons; the median campaign stayed active 40.0 hours.",
+    "Campaign clusters are 78% pure against the planted campaign labels.",
+    "K-means (k = 8) splits phishing into families: 26.2% cheap risky TLD / hyphenated domain, 19.6% inside hacked WordPress folders / deep paths, 14.4% mixed."
+  ],
+  "timings_s": {
+    "descriptive": 2.2,
+    "frequent_itemsets": 2.0,
+    "pagerank": 5.6,
+    "campaigns": 15.7,
+    "clustering": 2.7
+  },
+  "data_source": [
+    "synthetic"
+  ]
+}

@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PhishStream: real-time phishing detection</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+<style>
+:root{--bg:#EEF1F5;--surface:#FFFFFF;--ink:#14213D;--muted:#5B6577;--line:#D5DBE5;--soft:#E4E8F0;
+  --accent:#3F4FD8;--phish:#C8102E;--phish-bg:#FBE7EA;--likely:#B86E00;--likely-bg:#FCF1DE;--clean:#0F766E;--clean-bg:#E0F2EF;color-scheme:light}
+@media (prefers-color-scheme:dark){:root{--bg:#0F1522;--surface:#172033;--ink:#E6EAF2;--muted:#98A3B8;--line:#28324A;--soft:#222C42;
+  --accent:#8B97FF;--phish:#FF6B7F;--phish-bg:#3A1720;--likely:#F2B04E;--likely-bg:#3A2A10;--clean:#4FD1BE;--clean-bg:#0F3330;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;font-variant-numeric:tabular-nums}
+.wrap{max-width:1180px;margin:0 auto;padding:22px 18px 60px}
+header{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+.logo{font-weight:700;font-size:1.35rem;letter-spacing:-.01em}
+.logo span{display:block;font-weight:400;font-size:.88rem;color:var(--muted)}
+nav{display:flex;gap:2px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:3px;flex-wrap:wrap}
+nav button{font:inherit;border:0;background:none;color:var(--muted);padding:7px 14px;border-radius:7px;cursor:pointer}
+nav button[aria-selected=true]{background:var(--ink);color:var(--bg)}
+button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.mode{font-size:.82rem;color:var(--muted)}
+.mode b{color:var(--clean)}
+section{display:none;margin-top:22px}
+section.on{display:block}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(12,1fr)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;min-width:0}
+.c3{grid-column:span 3}.c4{grid-column:span 4}.c5{grid-column:span 5}.c6{grid-column:span 6}.c7{grid-column:span 7}.c8{grid-column:span 8}.c12{grid-column:span 12}
+@media(max-width:900px){.c3,.c4,.c5,.c6,.c7,.c8{grid-column:span 12}}
+@media(min-width:901px) and (max-width:1100px){.c3{grid-column:span 6}}
+h2{font-size:1.05rem;margin:0 0 3px}
+.sub{color:var(--muted);font-size:.86rem;margin:0 0 12px}
+.big{font-size:1.9rem;font-weight:700;line-height:1.1}
+.label{color:var(--muted);font-size:.85rem}
+.kv{display:grid;grid-template-columns:1fr auto;gap:5px 12px;font-size:.9rem}
+.kv span:nth-child(even){text-align:right;font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:.88rem}
+th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:600}
+td.n,th.n{text-align:right}
+.scroll{overflow-x:auto}
+code,.mono{font-family:ui-monospace,Consolas,monospace;font-size:.82rem;word-break:break-all}
+.btn{font:inherit;font-weight:600;border:0;border-radius:9px;padding:10px 16px;background:var(--ink);color:var(--bg);cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn.warn{background:var(--phish);color:#fff}
+
+/* check */
+.hero{padding:26px 0 8px}
+.hero h1{font-size:clamp(1.7rem,3.6vw,2.5rem);line-height:1.15;margin:0 0 8px;letter-spacing:-.02em;max-width:30ch}
+.hero p{margin:0;color:var(--muted);max-width:68ch}
+.row{display:flex;gap:10px;margin-top:20px}
+.row input{flex:1;min-width:0;font:inherit;font-size:1.02rem;padding:13px 15px;border:2px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink)}
+@media(max-width:640px){.row{flex-direction:column}.row .btn{padding:13px}}
+.tries{margin-top:9px;font-size:.88rem;color:var(--muted)}
+.tries button{font:inherit;font-size:.88rem;border:0;background:none;color:var(--accent);text-decoration:underline;cursor:pointer;padding:2px 4px}
+.verdict{margin-top:20px;border-radius:14px;padding:22px 24px;display:none}
+.verdict.on{display:block}
+.verdict h3{margin:0 0 4px;font-size:clamp(1.35rem,3vw,1.9rem)}
+.verdict ul{margin:10px 0 0;padding-left:20px}
+.v-known{background:var(--phish-bg);color:var(--phish)}.v-likely{background:var(--likely-bg);color:var(--likely)}.v-clean{background:var(--clean-bg);color:var(--clean)}
+.meter{height:10px;border-radius:5px;background:var(--soft);overflow:hidden;margin:12px 0 4px;max-width:420px}
+.meter i{display:block;height:100%;background:currentColor}
+.how{margin-top:12px;font-size:.85rem;opacity:.9}
+
+/* live */
+.tape{display:flex;gap:6px;overflow:hidden;padding:2px 0;mask-image:linear-gradient(90deg,#000 85%,transparent)}
+.pill{flex:0 0 auto;max-width:330px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border-radius:999px;padding:4px 11px;font-size:.78rem;font-family:ui-monospace,Consolas,monospace}
+.p-known{background:var(--phish-bg);color:var(--phish)}.p-likely{background:var(--likely-bg);color:var(--likely)}
+.wave{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.gauge{flex:1;min-width:220px}
+.gbar{position:relative;height:18px;border-radius:9px;background:var(--soft);overflow:hidden}
+.gbar i{position:absolute;inset:0 auto 0 0;transition:width .5s}
+.gbar b{position:absolute;top:0;bottom:0;width:2px;background:var(--ink);opacity:.4}
+.lvl{font-size:1.4rem;font-weight:700}
+.controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.controls input[type=range]{width:150px}
+svg text{fill:var(--muted);font-size:11px}
+.legend{display:flex;gap:14px;font-size:.82rem;color:var(--muted);margin-top:4px;flex-wrap:wrap}
+.legend i{display:inline-block;width:14px;height:3px;vertical-align:middle;margin-right:5px}
+.buckets{display:flex;gap:3px;align-items:flex-end;height:70px;overflow:hidden}
+.buckets div{flex:0 0 auto;width:16px;background:var(--accent);border-radius:3px 3px 1px 1px}
+.findings{margin:0;padding-left:20px}
+.findings li{margin:6px 0;max-width:95ch}
+.tag{display:inline-block;font-size:.76rem;padding:1px 7px;border-radius:5px;background:var(--soft);margin:1px 2px}
+.note{font-size:.84rem;color:var(--muted);margin-top:10px}
+footer{margin-top:34px;color:var(--muted);font-size:.84rem}
+@media(prefers-reduced-motion:reduce){.gbar i{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="logo">PhishStream<span>Real-time phishing detection on a streaming big data pipeline</span></div>
+  <nav role="tablist" id="tabs">
+    <button role="tab" aria-selected="true" data-t="check">Check a link</button>
+    <button role="tab" aria-selected="false" data-t="live">Live stream</button>
+    <button role="tab" aria-selected="false" data-t="insights">Insights</button>
+    <button role="tab" aria-selected="false" data-t="model">Model &amp; benchmarks</button>
+  </nav>
+</header>
+<div class="mode" id="mode">Connecting…</div>
+
+<!-- CHECK -->
+<section id="s-check" class="on">
+  <div class="hero">
+    <h1>Paste a link from WhatsApp, SMS or email before you open it.</h1>
+    <p>Known scam links are caught by a Bloom filter over the threat list. Brand-new ones that no list has seen yet are caught by a machine-learning model that reads the link itself.</p>
+    <div class="row">
+      <input id="url" placeholder="Paste a link, for example hdfc-netbanking.in/login" autocomplete="off" aria-label="Link to check">
+      <button class="btn" id="go">Check link</button>
+    </div>
+    <div class="tries">Try:
+      <button id="known">a known threat</button>
+      <button data-u="https://sbi-kyc-update.top/verify">fake bank KYC</button>
+      <button data-u="http://shreeganesh12.in/images/paytm/otp">hacked website</button>
+      <button data-u="https://phonepe-rewards7.web.app/claim">free-hosting scam</button>
+      <button data-u="https://www.hdfcbank.com/personal/pay/cards">real bank page</button>
+    </div>
+  </div>
+  <div class="verdict" id="verdict" role="status" aria-live="polite"></div>
+</section>
+
+<!-- LIVE -->
+<section id="s-live">
+  <div class="grid">
+    <div class="card c12">
+      <div class="wave">
+        <div><div class="label">Campaign alert (DGIM, last 1,000 events)</div><div class="lvl" id="lvl">–</div></div>
+        <div class="gauge"><div class="gbar"><i id="gfill"></i><b style="left:12.5%"></b><b style="left:25%"></b></div>
+          <div class="label" id="gtext" style="margin-top:4px">–</div></div>
+        <div class="controls">
+          <button class="btn warn" id="burst">Start a phishing campaign</button>
+          <label class="label">Rate <input type="range" id="rate" min="50" max="3000" step="50"> <span id="rateTxt"></span>/s</label>
+          <button class="btn ghost" id="pause">Pause</button>
+        </div>
+      </div>
+      <div class="tape" id="tape" style="margin-top:14px"></div>
+    </div>
+    <div class="card c3"><div class="label">Events processed</div><div class="big" id="ev">–</div><div class="label" id="eps">–</div></div>
+    <div class="card c3"><div class="label">Known phishing (Bloom filter)</div><div class="big" style="color:var(--phish)" id="kn">–</div><div class="label" id="bfp">–</div></div>
+    <div class="card c3"><div class="label">New phishing (ML model)</div><div class="big" style="color:var(--likely)" id="lk">–</div><div class="label">never seen in any list</div></div>
+    <div class="card c3"><div class="label">Live precision / recall</div><div class="big" id="pr">–</div><div class="label">against simulator ground truth</div></div>
+
+    <div class="card c8"><h2>Malicious events in the last 1,000</h2><p class="sub">DGIM estimate against the exact count. Dotted lines: elevated and alert thresholds.</p>
+      <div id="dgimChart"></div>
+      <div class="legend"><span><i style="background:var(--ink)"></i>Exact</span><span><i style="background:var(--accent)"></i>DGIM estimate</span></div></div>
+    <div class="card c4"><h2>DGIM buckets</h2><p class="sub">Window N = 10,000. Bar height = log₂(bucket size), newest on the left.</p>
+      <div class="buckets" id="bk"></div><div class="kv" id="dgimKv" style="margin-top:10px"></div></div>
+
+    <div class="card c4"><h2>Distinct hosts (HyperLogLog)</h2><p class="sub">4 KB of registers, about 1.6% standard error.</p><div class="kv" id="hllKv"></div></div>
+    <div class="card c4"><h2>Most-targeted brands (Count-Min)</h2><p class="sub">Heavy hitters among flagged events: sketch vs exact.</p><div id="cms"></div></div>
+    <div class="card c4"><h2>Bloom filter</h2><p class="sub">Two-stage check: a "maybe" is confirmed against the exact store.</p><div class="kv" id="bloomKv"></div></div>
+
+    <div class="card c12"><h2>Reservoir sample of flagged events</h2><p class="sub">A uniform random sample of everything flagged so far, kept in fixed memory for analysts.</p>
+      <div class="scroll"><table><thead><tr><th>URL</th><th>Verdict</th><th class="n">Score</th></tr></thead><tbody id="sample"></tbody></table></div></div>
+  </div>
+</section>
+
+<!-- INSIGHTS -->
+<section id="s-insights">
+  <div class="grid">
+    <div class="card c12"><h2>Key findings</h2><p class="sub" id="dataSrc"></p><ul class="findings" id="findings"></ul></div>
+    <div class="card c6"><h2>Most impersonated brands</h2><div id="brands"></div></div>
+    <div class="card c6"><h2>Domain endings used by phishing</h2><div id="tlds"></div></div>
+    <div class="card c6"><h2>Phishing by hour of day</h2><div id="hours"></div></div>
+    <div class="card c6"><h2>Weekly phishing volume</h2><div id="weekly"></div></div>
+    <div class="card c6"><h2>Electricity-bill scams by day of month</h2><p class="sub">Look for the month-end spike.</p><div id="dom"></div></div>
+    <div class="card c6"><h2>Scam families (K-means)</h2><p class="sub" id="kmSub"></p><div class="scroll"><table><thead><tr><th>Share</th><th>Traits</th><th>Example</th></tr></thead><tbody id="families"></tbody></table></div></div>
+    <div class="card c7"><h2>Lure patterns (frequent itemsets)</h2><p class="sub" id="fiSub"></p>
+      <div class="scroll"><table><thead><tr><th>If a URL has</th><th>…it also has</th><th class="n">Support</th><th class="n">Confidence</th><th class="n">Lift</th></tr></thead><tbody id="rules"></tbody></table></div></div>
+    <div class="card c5"><h2>Apriori vs PCY vs SON</h2><p class="sub">Candidate pairs each algorithm had to count.</p><div id="algo"></div><div class="kv" id="algoKv" style="margin-top:10px"></div></div>
+    <div class="card c7"><h2>Phishing campaigns (MinHash + LSH)</h2><p class="sub" id="lshSub"></p>
+      <div class="scroll"><table><thead><tr><th class="n">Domains</th><th>Brand</th><th class="n">Hours active</th><th>Examples</th></tr></thead><tbody id="camps"></tbody></table></div></div>
+    <div class="card c5"><h2>LSH S-curve</h2><p class="sub" id="sSub"></p><div id="scurve"></div></div>
+    <div class="card c12"><h2>Shared infrastructure (PageRank)</h2><p class="sub" id="prSub"></p>
+      <div class="scroll"><table><thead><tr><th>#</th><th>Network</th><th class="n">PageRank ×1000</th><th class="n">Phishing domains</th><th class="n">Spark PageRank ×1000</th></tr></thead><tbody id="nets"></tbody></table></div></div>
+  </div>
+</section>
+
+<!-- MODEL -->
+<section id="s-model">
+  <div class="grid">
+    <div class="card c12"><h2>Detecting phishing nobody has listed yet</h2><p class="sub" id="splitSub"></p>
+      <div class="scroll"><table><thead><tr><th>Approach</th><th class="n">Precision</th><th class="n">Recall</th><th class="n">F1</th><th class="n">PR-AUC</th><th class="n">False-alarm rate</th></tr></thead><tbody id="cmp"></tbody></table></div>
+      <p class="note">A blacklist alone (Bloom filter over training-period URLs) catches almost none of next week's phishing. That gap is why the ML stage exists.</p></div>
+    <div class="card c6"><h2>Most important features</h2><p class="sub">Permutation importance on the test set (drop in PR-AUC).</p><div id="imp"></div></div>
+    <div class="card c6"><h2>Confusion matrix (gradient boosting)</h2><div id="cm"></div><h2 style="margin-top:16px">Spark MLlib (GBT) on the same split</h2><div class="kv" id="mllib"></div></div>
+    <div class="card c6"><h2>What the model misses</h2><p class="sub">Phishing scored as clean. On synthetic data many of these are deliberate label noise (0.5% of labels flipped, as in real feeds).</p><div id="missed" class="mono"></div></div>
+    <div class="card c6"><h2>False alarms</h2><p class="sub">URLs labelled safe but scored as phishing. Check these by hand: some are mislabelled phishing.</p><div id="fa" class="mono"></div></div>
+    <div class="card c12"><h2>Benchmarks</h2><p class="sub" id="benchSub"></p><div class="scroll"><table><thead><tr><th>Component</th><th>Result</th><th>Compared with</th></tr></thead><tbody id="bench"></tbody></table></div></div>
+  </div>
+</section>
+
+<footer>PhishStream · Kafka · Spark Structured Streaming · Bloom filter · DGIM · HyperLogLog · Count-Min · MinHash/LSH · PageRank · Apriori/PCY/SON · K-means · gradient boosting. Not on a list and not flagged does not guarantee a link is safe.</footer>
+</div>
+
+<script>
+const $=s=>document.querySelector(s), fmt=n=>n==null?"–":Number(n).toLocaleString("en-IN");
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+async function api(p,b){const r=await fetch(p,b?{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(b)}:{});return r.json();}
+
+/* tabs */
+let loaded={};
+document.querySelectorAll("#tabs button").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll("#tabs button").forEach(x=>x.setAttribute("aria-selected",x===b));
+  document.querySelectorAll("section").forEach(s=>s.classList.toggle("on",s.id==="s-"+b.dataset.t));
+  if((b.dataset.t==="insights"||b.dataset.t==="model")&&!loaded.ins) loadInsights();
+});
+
+/* ---------- small SVG charts ---------- */
+function hbars(el,rows,color="var(--accent)",fmtv=fmt){
+  const max=Math.max(1,...rows.map(r=>r[1]));
+  el.innerHTML=rows.map(([k,v])=>`<div style="display:grid;grid-template-columns:120px 1fr 64px;gap:8px;align-items:center;margin:4px 0;font-size:.86rem">
+   <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(k)}</span><span style="height:12px;border-radius:6px;background:${color};width:${v/max*100}%"></span><span style="text-align:right;color:var(--muted)">${fmtv(v)}</span></div>`).join("")||'<p class="sub">No data</p>';
+}
+function vbars(el,vals,labels,color="var(--accent)",H=150){
+  const W=Math.max(320,el.clientWidth||600),pad=24,bw=(W-pad)/vals.length,max=Math.max(1,...vals);
+  el.innerHTML=`<svg viewBox="0 0 ${W} ${H+18}" width="100%" role="img">${vals.map((v,i)=>{const h=v/max*H;return `<rect x="${pad+i*bw+1}" y="${H-h}" width="${Math.max(1,bw-2)}" height="${h}" rx="2" fill="${color}"><title>${labels[i]}: ${fmt(v)}</title></rect>`}).join("")}
+  ${labels.map((l,i)=>i%Math.ceil(vals.length/12)===0?`<text x="${pad+i*bw+bw/2}" y="${H+14}" text-anchor="middle">${l}</text>`:"").join("")}</svg>`;
+}
+function line(el,series,H=200,ys=[]){
+  const W=Math.max(320,el.clientWidth||700),pl=36,pb=18,n=Math.max(...series.map(s=>s.v.length));
+  if(!n){el.innerHTML='<p class="sub">Waiting for events…</p>';return;}
+  const max=Math.max(10,...series.flatMap(s=>s.v.filter(x=>x!=null)),...ys.map(y=>y.v))*1.1;
+  const X=i=>pl+i/(Math.max(1,n-1))*(W-pl-6),Y=v=>H-pb-v/max*(H-pb-6);
+  let g="";for(let i=0;i<=4;i++){const v=max/4*i;g+=`<line x1="${pl}" x2="${W}" y1="${Y(v)}" y2="${Y(v)}" stroke="${css('--line')}"/><text x="2" y="${Y(v)+4}">${Math.round(v)}</text>`}
+  ys.forEach(y=>g+=`<line x1="${pl}" x2="${W}" y1="${Y(y.v)}" y2="${Y(y.v)}" stroke="${y.c}" stroke-dasharray="4 4"/>`);
+  series.forEach(s=>{const pts=s.v.map((v,i)=>v==null?null:`${X(i)},${Y(v)}`).filter(Boolean).join(" ");g+=`<polyline fill="none" stroke="${s.c}" stroke-width="${s.w||2}" points="${pts}"/>`});
+  el.innerHTML=`<svg viewBox="0 0 ${W} ${H}" width="100%" role="img">${g}</svg>`;
+}
+
+/* ---------- check ---------- */
+async function check(){
+  const url=$("#url").value.trim(); if(!url){$("#url").focus();return;}
+  const r=await api("/api/check",{url}); const v=$("#verdict");
+  if(r.detail){v.className="verdict on v-likely";v.innerHTML=`<p>Paste a full link to check.</p>`;return;}
+  const pct=Math.round(r.score*100);
+  const map={known_phishing:["v-known","Known phishing link. Don’t open it.","It is on the threat list. If you opened it, don’t enter any OTP, PIN, password or card details. Report it at cybercrime.gov.in or call 1930."],
+             likely_phishing:["v-likely","This looks like a new phishing link.","It isn’t on any list yet, but the model rates it as phishing based on how the link is built."],
+             clean:["v-clean","No phishing signs found.","It isn’t on the threat list and the model doesn’t flag it. Still, never share an OTP or PIN through a link."]};
+  const [cls,h,p]=map[r.verdict];
+  v.className="verdict on "+cls;
+  v.innerHTML=`<h3>${h}</h3><p>${p}</p>${r.reasons.length?`<ul>${r.reasons.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`:""}
+   <div class="meter"><i style="width:${pct}%"></i></div><div class="label" style="color:inherit">Model phishing score: ${pct}%</div>
+   <div class="how">Bloom filter: ${r.in_bloom?(r.bloom_false_positive?"said “maybe”, exact store said no (false positive caught)":"match on the threat list"):"definitely not on the threat list"} · <span class="mono">${esc(url)}</span></div>`;
+}
+$("#go").onclick=check; $("#url").onkeydown=e=>{if(e.key==="Enter")check()};
+document.querySelectorAll("[data-u]").forEach(b=>b.onclick=()=>{$("#url").value=b.dataset.u;check()});
+$("#known").onclick=async()=>{const s=await api("/api/sample");$("#url").value=s.url.startsWith("http")?s.url:"http://"+s.url;check()};
+
+/* ---------- live ---------- */
+let last=null,lastT=0,eps=0;
+function renderLive(s){
+  const now=Date.now(); if(last&&now>lastT){eps=(s.events-last.events)/((now-lastT)/1000);} last=s;lastT=now;
+  $("#mode").innerHTML=`Mode: <b>${esc(s.mode)}</b> · ${fmt(s.events)} events processed`;
+  const w=s.wave, pct=Math.min(100,w.ratio*100*2);
+  const L={normal:["Normal","var(--clean)"],elevated:["Elevated","var(--likely)"],alert:["Campaign detected","var(--phish)"]}[w.level];
+  $("#lvl").textContent=L[0];$("#lvl").style.color=L[1];$("#gfill").style.width=pct+"%";$("#gfill").style.background=L[1];
+  $("#gtext").textContent=`About ${fmt(w.malicious_last_window)} of the last ${fmt(w.window)} events were malicious (${(w.ratio*100).toFixed(1)}%). Alert at 25%.`;
+  if(s.rate!=null){ if(document.activeElement!==$("#rate")) $("#rate").value=s.rate; $("#rateTxt").textContent=s.rate; $("#pause").textContent=s.running?"Pause":"Resume"; }
+  $("#ev").textContent=fmt(s.events); $("#eps").textContent=`${fmt(Math.max(0,Math.round(eps)))} events/sec`;
+  $("#kn").textContent=fmt(s.verdicts.known_phishing); $("#lk").textContent=fmt(s.verdicts.likely_phishing);
+  $("#bfp").textContent=`${fmt(s.bloom_fp_caught)} Bloom false positives caught`;
+  $("#pr").textContent=s.live_precision==null?"–":`${(s.live_precision*100).toFixed(1)}% / ${(s.live_recall*100).toFixed(1)}%`;
+  $("#tape").innerHTML=s.recent.map(r=>`<span class="pill ${r.verdict==="known_phishing"?"p-known":"p-likely"}" title="${esc(r.url)}">${esc(r.url.replace(/^https?:\/\//,""))}</span>`).join("");
+  line($("#dgimChart"),[{v:s.timeline.map(t=>t.exact),c:css("--ink")},{v:s.timeline.map(t=>t.est),c:css("--accent"),w:1.6}],220,[{v:125,c:css("--likely")},{v:250,c:css("--phish")}]);
+  const d=s.dgim; $("#bk").innerHTML=d.bucket_sizes.map(z=>`<div style="height:${8+Math.log2(z)*5}px" title="size ${z}"></div>`).join("");
+  const err=(e,a)=>a?` (${(Math.abs(e-a)/a*100).toFixed(1)}% off)`:"";
+  kv("#dgimKv",[["Buckets kept",`${d.buckets} (≈${d.buckets*8} bytes)`],["Exact window needs",`${fmt(d.N)} bits`],["Last 10,000: DGIM / exact",`${fmt(d.est_N)} / ${fmt(d.exact_N)}${err(d.est_N,d.exact_N)}`]]);
+  const h=s.hll; kv("#hllKv",[["All hosts: HLL / exact",`${fmt(h.distinct_hosts)} / ${fmt(h.exact_hosts)}${err(h.distinct_hosts,h.exact_hosts)}`],["Malicious hosts: HLL / exact",`${fmt(h.distinct_bad_hosts)} / ${fmt(h.exact_bad_hosts)}${err(h.distinct_bad_hosts,h.exact_bad_hosts)}`],["Sketch memory",`${fmt(h.bytes)} bytes`]]);
+  const ex=Object.fromEntries(s.cms.exact_top_brands||[]);
+  $("#cms").innerHTML=`<table><thead><tr><th>Brand</th><th class="n">Sketch</th><th class="n">Exact</th></tr></thead><tbody>${s.cms.top_brands.slice(0,7).map(([k,v])=>`<tr><td>${esc(k)}</td><td class="n">${fmt(v)}</td><td class="n">${fmt(ex[k])}</td></tr>`).join("")}</tbody></table><p class="note">${fmt(s.cms.bytes)} bytes of counters.</p>`;
+  const b=s.bloom; kv("#bloomKv",[["Threat URLs stored",fmt(b.items)],["Memory",`${(b.bytes/1024).toFixed(1)} KB`],["Hash functions (k)",b.k],["Expected false positives",`${(b.expected_fp*100).toFixed(2)}%`],["False positives caught",fmt(s.bloom_fp_caught)]]);
+  $("#sample").innerHTML=s.sample.map(r=>`<tr><td class="mono">${esc(r.url)}</td><td>${r.verdict==="known_phishing"?"Known":"New (ML)"}</td><td class="n">${r.score.toFixed(2)}</td></tr>`).join("");
+}
+function kv(sel,rows){$(sel).innerHTML=rows.map(([a,b])=>`<span>${a}</span><span>${b}</span>`).join("")}
+let polling=false;
+function poll(){ if(polling) return; polling=true; setInterval(async()=>{try{renderLive(await api("/api/live"))}catch(e){}},1500); }
+function connect(){
+  let opened=false;
+  try{
+    const ws=new WebSocket((location.protocol==="https:"?"wss://":"ws://")+location.host+"/ws/live");
+    ws.onopen=()=>opened=true;
+    ws.onmessage=e=>renderLive(JSON.parse(e.data));
+    ws.onclose=()=>opened?setTimeout(connect,2000):poll();   // fall back to polling if WebSockets are blocked
+  }catch(e){poll();}
+}
+connect();
+$("#burst").onclick=async()=>{await api("/api/burst",{});$("#burst").textContent="Campaign running…";setTimeout(()=>$("#burst").textContent="Start a phishing campaign",8000)};
+$("#rate").oninput=()=>$("#rateTxt").textContent=$("#rate").value;
+$("#rate").onchange=()=>api("/api/sim",{rate:+$("#rate").value});
+$("#pause").onclick=()=>api("/api/sim",{running:$("#pause").textContent==="Resume"});
+
+/* ---------- insights + model ---------- */
+async function loadInsights(){
+  loaded.ins=true; const all=await api("/api/insights"); const I=all.insights, D=I.descriptive;
+  $("#dataSrc").textContent=`${fmt(D.n_phishing)} phishing and ${fmt(D.n_safe)} safe URLs, ${D.date_range[0]} to ${D.date_range[1]}. Source: ${I.data_source.join(", ")}${I.data_source.includes("synthetic")?" (synthetic data: these findings validate the method; run the real-feed pipeline for real-world findings)":""}.`;
+  $("#findings").innerHTML=I.findings.map(f=>`<li>${esc(f)}</li>`).join("");
+  hbars($("#brands"),Object.entries(D.top_brands).slice(0,10));
+  hbars($("#tlds"),Object.entries(D.top_tlds).slice(0,10),"var(--likely)");
+  vbars($("#hours"),D.by_hour,D.by_hour.map((_,i)=>i+":00"));
+  const wk=Object.entries(D.weekly_volume); line($("#weekly"),[{v:wk.map(x=>x[1]),c:css("--accent")}],170);
+  vbars($("#dom"),D.day_of_month_bill,D.day_of_month_bill.map((_,i)=>i+1),"var(--phish)");
+  const C=I.clustering; $("#kmSub").textContent=`k = ${C.k} chosen by silhouette score (${C.silhouette_by_k[C.k]}).`;
+  $("#families").innerHTML=C.families.map(f=>`<tr><td>${f.share_pct}%</td><td>${f.traits.map(t=>`<span class="tag">${esc(t)}</span>`).join("")}</td><td class="mono">${esc(f.example)}</td></tr>`).join("");
+  const F=I.frequent_itemsets; $("#fiSub").textContent=`${fmt(F.baskets)} URL baskets, minimum support ${fmt(F.min_support_count)} URLs (0.4%).`;
+  $("#rules").innerHTML=F.rules.slice(0,10).map(r=>`<tr><td>${r.if.map(x=>`<span class="tag">${esc(x)}</span>`).join("")}</td><td>${r.then.map(x=>`<span class="tag">${esc(x)}</span>`).join("")}</td><td class="n">${(r.support*100).toFixed(1)}%</td><td class="n">${(r.confidence*100).toFixed(0)}%</td><td class="n">${r.lift}</td></tr>`).join("");
+  const S=all.spark&&all.spark.son;
+  hbars($("#algo"),[["Apriori",F.apriori_candidate_pairs],["PCY",F.pcy_candidate_pairs],...(S?[["SON (Spark)",S.son_candidates]]:[])],"var(--accent)");
+  kv("#algoKv",[["Frequent pairs found",fmt(F.frequent_pairs_total)],["Frequent triples found",fmt(F.frequent_triples_total)],["PCY frequent buckets",fmt(F.pcy_frequent_buckets)],["Same result as Apriori",F.pcy_same_result_as_apriori?"Yes":"No"],...(S?[["SON partitions",S.partitions]]:[])]);
+  const L=I.campaigns; $("#lshSub").textContent=`${fmt(L.campaigns_found)} campaigns from ${fmt(L.hosts)} hosts. LSH checked ${fmt(L.candidate_pairs)} of ${fmt(L.all_pairs)} possible pairs (${L.comparisons_saved_pct}% skipped)${L.synthetic_check?`; cluster purity ${(L.synthetic_check.mean_cluster_purity*100).toFixed(0)}%`:""}.`;
+  $("#camps").innerHTML=L.top_campaigns.slice(0,8).map(c=>`<tr><td class="n">${c.size}</td><td>${esc(c.brand||"–")}</td><td class="n">${c.hours_active}</td><td class="mono">${c.examples.slice(0,3).map(esc).join("<br>")}</td></tr>`).join("");
+  $("#sSub").textContent=`b = ${L.lsh_bands} bands × r = ${L.lsh_rows} rows. Probability two domains become candidates vs their Jaccard similarity.`;
+  line($("#scurve"),[{v:L.s_curve.map(p=>p.p*100),c:css("--accent")}],170);
+  const P=I.pagerank, SP=all.spark&&all.spark.pagerank;
+  if(P.available){
+    $("#prSub").textContent=`Graph of ${fmt(P.nodes)} domains, IPs and /24 networks, ${fmt(P.edges)} edges, converged in ${P.iterations} iterations${P.synthetic_check?`. Recovered ${P.synthetic_check.found_in_top8} of ${P.synthetic_check.planted_bulletproof_networks} planted bulletproof networks in the top 8`:""}.`;
+    const sp=Object.fromEntries((SP&&SP.top_networks||[]).map(x=>[x.network,x.rank]));
+    $("#nets").innerHTML=P.top_networks.map((n,i)=>`<tr><td>${i+1}</td><td class="mono">${esc(n.network)}</td><td class="n">${n.rank}</td><td class="n">${fmt(n.domains)}</td><td class="n">${sp[n.network]??"–"}</td></tr>`).join("");
+  } else $("#prSub").textContent=P.reason;
+
+  const M=all.model;
+  $("#splitSub").textContent=`Time-based split: trained on URLs up to ${M.split.cutoff.slice(0,10)}, tested on ${fmt(M.split.test_rows)} later URLs (${fmt(M.split.test_phishing)} phishing) from campaigns the model never saw.`;
+  const row=(n,m)=>`<tr><td>${n}</td><td class="n">${(m.precision*100).toFixed(1)}%</td><td class="n">${(m.recall*100).toFixed(1)}%</td><td class="n">${m.f1.toFixed(3)}</td><td class="n">${m.pr_auc}</td><td class="n">${(m.false_positive_rate*100).toFixed(2)}%</td></tr>`;
+  $("#cmp").innerHTML=row("Blacklist only (Bloom filter)",M.bloom_only)+row("Logistic regression",M.logistic_regression)+row("<b>Gradient boosting (deployed)</b>",M.gradient_boosting);
+  hbars($("#imp"),M.feature_importance.slice(0,10).map(f=>[f.feature,f.importance]),"var(--accent)",v=>v.toFixed(3));
+  const c=M.gradient_boosting.confusion;
+  $("#cm").innerHTML=`<table><thead><tr><th></th><th class="n">Predicted safe</th><th class="n">Predicted phishing</th></tr></thead><tbody><tr><th>Actually safe</th><td class="n">${fmt(c.tn)}</td><td class="n">${fmt(c.fp)}</td></tr><tr><th>Actually phishing</th><td class="n">${fmt(c.fn)}</td><td class="n">${fmt(c.tp)}</td></tr></tbody></table><p class="note">${M.inference_us_per_url} µs per URL to score.</p>`;
+  const G=all.spark&&all.spark.mllib_gbt;
+  kv("#mllib",G?[["ROC-AUC",G.roc_auc],["PR-AUC",G.pr_auc],["Precision",(G.precision*100).toFixed(1)+"%"],["Recall",(G.recall*100).toFixed(1)+"%"],["Training time",G.train_seconds+" s"]]:[["Status","Run spark_jobs/analytics_spark.py"]]);
+  $("#missed").innerHTML=M.missed_examples.map(esc).join("<br>"); $("#fa").innerHTML=M.false_alarm_examples.map(esc).join("<br>")||"None";
+  const B=all.benchmarks;
+  if(B){$("#benchSub").textContent=`Measured on ${B.machine}, single core.`;
+    const rows=[["Streaming engine",`${fmt(B.engine.events_per_sec_single_core)} events/sec, p95 ${B.engine.p95_ms} ms per URL`,"Bloom + ML + 5 sketches per event"],
+      ["Bloom filter",`${(B.bloom.bloom_bytes/1024).toFixed(0)} KB, observed FP ${(B.bloom.observed_fp*100).toFixed(3)}%, 0 false negatives`,`${B.bloom.memory_ratio}× smaller than a Python set (${(B.bloom.python_set_bytes/1048576).toFixed(1)} MB)`],
+      ["HyperLogLog",B.hyperloglog.runs.map(r=>`${fmt(r.true)} → ${r.error_pct}%`).join(", ")+" error",`4 KB vs ${(B.hyperloglog.exact_set_bytes_1M/1048576).toFixed(0)} MB exact set at 1M`],
+      ["Count-Min Sketch",`top-20 recall ${B.countmin.top20_recall*100}%, mean error ${B.countmin.top20_mean_error_pct}%`,`${(B.countmin.sketch_bytes/1024).toFixed(0)} KB for ${fmt(B.countmin.events)} events`],
+      ["DGIM",`${B.dgim.buckets} buckets, mean error ${B.dgim.mean_error_pct}%, max ${B.dgim.max_error_pct}%`,`${B.dgim.bucket_bytes} bytes vs ${fmt(B.dgim.exact_bytes)} bytes exact (bound 50%)`]];
+    $("#bench").innerHTML=rows.map(r=>`<tr>${r.map(x=>`<td>${x}</td>`).join("")}</tr>`).join("");}
+}
+</script>
+</body>
+</html>

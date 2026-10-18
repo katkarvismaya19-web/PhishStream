@@ -1,0 +1,44 @@
+# Full cluster mode: Kafka -> Spark Structured Streaming -> Redis -> FastAPI dashboard
+#   docker compose up --build        then open http://localhost:8000
+services:
+  kafka:
+    image: apache/kafka:3.8.0
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_NUM_PARTITIONS: 4
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+    ports: ["9092:9092"]
+
+  redis:
+    image: redis:7-alpine
+    ports: ["6379:6379"]
+
+  producer:
+    build: .
+    command: python -m phishstream.stream.producer --sink kafka --rate 3000 --burst-every 40
+    environment: {KAFKA_BOOTSTRAP: "kafka:9092"}
+    depends_on: [kafka]
+    restart: on-failure
+
+  streaming:
+    build: {context: ., dockerfile: Dockerfile.spark}
+    command: >
+      sh -c 'spark-submit --master local[4]
+      --packages org.apache.spark:spark-sql-kafka-0-10_2.13:$$(python -c "import pyspark; print(pyspark.__version__)")
+      spark_jobs/streaming_job.py --source kafka'
+    environment: {KAFKA_BOOTSTRAP: "kafka:9092", REDIS_URL: "redis://redis:6379/0"}
+    depends_on: [kafka, redis]
+    restart: on-failure
+
+  api:
+    build: .
+    environment: {REDIS_URL: "redis://redis:6379/0"}
+    ports: ["8000:8000"]
+    depends_on: [redis]

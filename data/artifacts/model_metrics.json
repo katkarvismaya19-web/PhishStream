@@ -1,0 +1,124 @@
+{
+  "split": {
+    "cutoff": "2026-10-03 05:51:00",
+    "train_rows": 123615,
+    "test_rows": 20179,
+    "test_phishing": 7669,
+    "test_safe": 12510
+  },
+  "bloom_only": {
+    "precision": 0.3043,
+    "recall": 0.0009,
+    "f1": 0.0018,
+    "roc_auc": 0.4998,
+    "pr_auc": 0.38,
+    "confusion": {
+      "tn": 12494,
+      "fp": 16,
+      "fn": 7662,
+      "tp": 7
+    },
+    "false_positive_rate": 0.0013
+  },
+  "logistic_regression": {
+    "precision": 0.9868,
+    "recall": 0.9725,
+    "f1": 0.9796,
+    "roc_auc": 0.9928,
+    "pr_auc": 0.9906,
+    "confusion": {
+      "tn": 12410,
+      "fp": 100,
+      "fn": 211,
+      "tp": 7458
+    },
+    "false_positive_rate": 0.008
+  },
+  "gradient_boosting": {
+    "precision": 0.9927,
+    "recall": 0.9787,
+    "f1": 0.9857,
+    "roc_auc": 0.9938,
+    "pr_auc": 0.9919,
+    "confusion": {
+      "tn": 12455,
+      "fp": 55,
+      "fn": 163,
+      "tp": 7506
+    },
+    "false_positive_rate": 0.0044
+  },
+  "train_seconds": 3.0,
+  "inference_us_per_url": 4.7,
+  "feature_importance": [
+    {
+      "feature": "brand_in_host_unofficial",
+      "importance": 0.2698
+    },
+    {
+      "feature": "path_depth",
+      "importance": 0.0207
+    },
+    {
+      "feature": "longest_token_host",
+      "importance": 0.0058
+    },
+    {
+      "feature": "has_https",
+      "importance": 0.0032
+    },
+    {
+      "feature": "n_lure_words",
+      "importance": 0.003
+    },
+    {
+      "feature": "has_wp_path",
+      "importance": 0.0027
+    },
+    {
+      "feature": "shortener",
+      "importance": 0.0022
+    },
+    {
+      "feature": "has_php",
+      "importance": 0.0015
+    },
+    {
+      "feature": "n_digits_url",
+      "importance": 0.0013
+    },
+    {
+      "feature": "official_domain",
+      "importance": 0.0013
+    },
+    {
+      "feature": "brand_in_path",
+      "importance": 0.0012
+    },
+    {
+      "feature": "host_len",
+      "importance": 0.0007
+    }
+  ],
+  "missed_examples": [
+    "https://www.bankbazaar.com/business/whatsapp-loan-approved-fraud-warning-97204350",
+    "https://shop.whatsapp.com/products/fyejonioi/2026/help",
+    "https://pettea.shop/about",
+    "https://rbi.org.in/ojjn/zhiokm/xcgx-txsigfzg-45578",
+    "https://tvnecma-zanpg.000webhostapp.com/2026",
+    "https://timesofindia.indiatimes.com/news/microsoft-instant-loan-guide-16369864",
+    "https://sbi.co.in/lndtp",
+    "https://bharatpe.com/yqofaklu-bsebmek-46525"
+  ],
+  "false_alarm_examples": [
+    "https://airtel.airtel-delivery-failed-37.xyz/index.php?id=thjcxmotlhfo&session=551398781",
+    "https://sbi.instant-loan-sbi-18.click/login",
+    "http://163.204.17.42:80/aadhaar/validate",
+    "http://138.5.251.46:80/kotak/verify",
+    "https://sbi.instant-loan-sbi-80.click/secure",
+    "http://lucky-draw-hdfc.xyz/index.php",
+    "https://itr-refund-gpay503.shop/wp-login.php",
+    "https://irctc.irctc-delivery-failed-63.site/auth"
+  ],
+  "threshold": 0.5
+}

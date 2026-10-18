@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+spark-warehouse/
+metastore_db/
+derby.log
+data/urls.csv
+data/stream_in/
+data/artifacts/*.bin
+data/artifacts/*.joblib
+data/artifacts/blacklist.txt
+data/artifacts/live_snapshot.json

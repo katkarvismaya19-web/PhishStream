@@ -1,0 +1,210 @@
+{
+  "son": {
+    "partitions": 8,
+    "baskets": 49595,
+    "min_support_count": 198,
+    "son_candidates": 264,
+    "frequent_pairs": 129,
+    "top_pairs": [
+      {
+        "items": [
+          "tld:.in",
+          "word:verify"
+        ],
+        "support": 0.0256
+      },
+      {
+        "items": [
+          "tld:.in",
+          "word:secure"
+        ],
+        "support": 0.0248
+      },
+      {
+        "items": [
+          "brand:sbi",
+          "tld:.vip"
+        ],
+        "support": 0.0215
+      },
+      {
+        "items": [
+          "tld:.com",
+          "word:secure"
+        ],
+        "support": 0.0181
+      },
+      {
+        "items": [
+          "tld:.com",
+          "word:verify"
+        ],
+        "support": 0.018
+      },
+      {
+        "items": [
+          "word:login",
+          "word:secure"
+        ],
+        "support": 0.0169
+      },
+      {
+        "items": [
+          "tld:.com",
+          "word:login"
+        ],
+        "support": 0.0168
+      },
+      {
+        "items": [
+          "tld:.in",
+          "word:login"
+        ],
+        "support": 0.0159
+      },
+      {
+        "items": [
+          "brand:sbi",
+          "word:login"
+        ],
+        "support": 0.0146
+      },
+      {
+        "items": [
+          "brand:phonepe",
+          "tld:.rest"
+        ],
+        "support": 0.0136
+      },
+      {
+        "items": [
+          "word:kyc",
+          "word:update"
+        ],
+        "support": 0.0132
+      },
+      {
+        "items": [
+          "tld:.net",
+          "word:verify"
+        ],
+        "support": 0.0125
+      },
+      {
+        "items": [
+          "word:kyc",
+          "word:verify"
+        ],
+        "support": 0.0124
+      },
+      {
+        "items": [
+          "tld:.org",
+          "word:verify"
+        ],
+        "support": 0.0124
+      },
+      {
+        "items": [
+          "tld:.net",
+          "word:secure"
+        ],
+        "support": 0.0122
+      }
+    ]
+  },
+  "timings_s": {
+    "son": 13.3,
+    "pagerank": 56.2,
+    "mllib": 69.2
+  },
+  "pagerank": {
+    "nodes": 50750,
+    "iterations": 20,
+    "top_networks": [
+      {
+        "network": "76.203.128.0/24",
+        "rank": 1.423
+      },
+      {
+        "network": "148.184.102.0/24",
+        "rank": 1.423
+      },
+      {
+        "network": "176.215.251.0/24",
+        "rank": 1.407
+      },
+      {
+        "network": "43.56.147.0/24",
+        "rank": 1.387
+      },
+      {
+        "network": "138.5.251.0/24",
+        "rank": 1.386
+      },
+      {
+        "network": "53.163.52.0/24",
+        "rank": 1.376
+      },
+      {
+        "network": "135.122.1.0/24",
+        "rank": 1.368
+      },
+      {
+        "network": "45.149.147.0/24",
+        "rank": 1.358
+      },
+      {
+        "network": "118.135.70.0/24",
+        "rank": 1.345
+      },
+      {
+        "network": "114.192.39.0/24",
+        "rank": 1.311
+      }
+    ]
+  },
+  "mllib_gbt": {
+    "train_rows": 123615,
+    "test_rows": 20179,
+    "train_seconds": 61.1,
+    "roc_auc": 0.993,
+    "pr_auc": 0.9899,
+    "precision": 0.9928,
+    "recall": 0.9694,
+    "feature_importance": [
+      {
+        "feature": "brand_in_host_unofficial",
+        "importance": 0.3676
+      },
+      {
+        "feature": "longest_token_host",
+        "importance": 0.1459
+      },
+      {
+        "feature": "path_depth",
+        "importance": 0.1261
+      },
+      {
+        "feature": "n_lure_words",
+        "importance": 0.0578
+      },
+      {
+        "feature": "has_https",
+        "importance": 0.04
+      },
+      {
+        "feature": "n_digits_url",
+        "importance": 0.0394
+      },
+      {
+        "feature": "digit_ratio_host",
+        "importance": 0.0387
+      },
+      {
+        "feature": "brand_in_path",
+        "importance": 0.0326
+      }
+    ]
+  }
+}
